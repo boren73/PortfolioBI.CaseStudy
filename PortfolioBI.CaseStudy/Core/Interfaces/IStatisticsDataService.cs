@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PortfolioBI.CaseStudy.Core.Interfaces
 {
-    public interface ISecurityStatisticsDataService<T>
+    public interface IStatisticsDataService<T>
     {
         T GetStatisticsData();
     }
