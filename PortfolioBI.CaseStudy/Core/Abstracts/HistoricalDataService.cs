@@ -9,14 +9,14 @@ using PortfolioBI.CaseStudy.Core.Interfaces;
 
 namespace PortfolioBI.CaseStudy.Core.Abstracts
 {
-    public abstract class HistoricalDataCsvSource<T> : IHistoricalDataCsvSource<T>
+    public abstract class HistoricalDataService<T> : IHistoricalDataService<T>
     {
         protected readonly IWebHostEnvironment _webHostEnvironment;
         protected readonly ILogger _logger;
         protected List<T> _historicalData;
         private static object lockObject = new object();
         
-        public HistoricalDataCsvSource(IWebHostEnvironment webHostEnvironment, ILogger logger)
+        public HistoricalDataService(IWebHostEnvironment webHostEnvironment, ILogger logger)
         {
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;

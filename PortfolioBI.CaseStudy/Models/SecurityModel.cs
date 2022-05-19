@@ -11,11 +11,11 @@ namespace PortfolioBI.CaseStudy.Models
 
         public string SecurityName { get; private set; }
 
-        public List<HistoricDataModel> HistoricalData { get; private set; }
+        public List<SecurityHistoricDataModel> HistoricalData { get; private set; }
 
         public SecurityStatisticDataModel StatisticsData { get; private set; }
 
-        public SecurityModel(string isin, string securityName, List<HistoricDataModel> historicalData, SecurityStatisticDataModel statisticsData)
+        public SecurityModel(string isin, string securityName, List<SecurityHistoricDataModel> historicalData, SecurityStatisticDataModel statisticsData)
         {
             ISIN = isin;
             SecurityName = securityName;

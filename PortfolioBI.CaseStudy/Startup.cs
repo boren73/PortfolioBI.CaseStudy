@@ -30,7 +30,7 @@ namespace PortfolioBI.CaseStudy
         {
             services.AddControllersWithViews();
 
-            services.AddTransient<IHistoricalDataCsvSource<HistoricDataModel>, HistoricalDataCsvService>();
+            services.AddTransient<IHistoricalDataService<SecurityHistoricDataModel>, SecurityHistoricalDataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

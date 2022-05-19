@@ -7,10 +7,18 @@ namespace PortfolioBI.CaseStudy.Models
 {
     public class SecurityStatisticDataModel
     {
-        public double MinClose { get; set; }
+        public StatisticModel MinClose { get; set; }
 
-        public double MaxClose { get; set; }
+        public StatisticModel MaxClose { get; set; }
 
-        public double MaxSpike { get; set; }
+        public StatisticModel MaxSpike { get; set; }
+    }
+
+
+    public class StatisticModel
+    {
+        public DateTime Date { get; set; }
+
+        public double Value { get; set; }
     }
 }

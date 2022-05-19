@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PortfolioBI.CaseStudy.Models
 {
-    public class HistoricDataModel
+    public class SecurityHistoricDataModel
     {
         public DateTime Date { get; set; }
 

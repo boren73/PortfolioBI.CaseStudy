@@ -10,14 +10,14 @@ using PortfolioBI.CaseStudy.Core.Enums;
 
 namespace PortfolioBI.CaseStudy.Core.Services
 {
-    public class HistoricalDataCsvService : HistoricalDataCsvSource<HistoricDataModel>
+    public class SecurityHistoricalDataService : HistoricalDataService<SecurityHistoricDataModel>
     {
-        public HistoricalDataCsvService(IWebHostEnvironment webHostEnvironment, ILogger logger)
+        public SecurityHistoricalDataService(IWebHostEnvironment webHostEnvironment, ILogger logger)
         :base(webHostEnvironment, logger)
         { 
         }
 
-        public override List<HistoricDataModel> GetHistoricalData(string csvName)
+        public override List<SecurityHistoricDataModel> GetHistoricalData(string csvName)
         {
             if(_historicalData == null)
             {
@@ -29,7 +29,7 @@ namespace PortfolioBI.CaseStudy.Core.Services
             return _historicalData;
         }
 
-        protected override HistoricDataModel FromCsv(string historicDataLine)
+        protected override SecurityHistoricDataModel FromCsv(string historicDataLine)
         {
             if (string.IsNullOrEmpty(historicDataLine) || !historicDataLine.Contains(GeneralOptions.CsvSeparator))
             {
@@ -39,7 +39,7 @@ namespace PortfolioBI.CaseStudy.Core.Services
             try
             {
                 var dataValues = historicDataLine.Split(GeneralOptions.CsvSeparator);
-                var model =  new HistoricDataModel
+                var model =  new SecurityHistoricDataModel
                 {
                     Date = DateTime.Parse(dataValues[(int)HistoricDataFields.Date]),
                     Open = GetHistoricValue(dataValues, HistoricDataFields.Open),
