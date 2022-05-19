@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PortfolioBI.CaseStudy.Core.Interfaces
 {
-    interface IHistoricalDataService<T>
+    public interface IHistoricalDataService<T>
     {
         List<T> GetHistoricalData(string csvName);
     }
