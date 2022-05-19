@@ -22,13 +22,13 @@ namespace PortfolioBI.CaseStudy.Core.Services
             var model = new SecurityStatisticDataModel();
 
             var maxClose = _historicalData.Max(data => data.Close);
-            model.MaxClose = new StatisticModel { Value = maxClose, Date = _historicalData.Find(data => data.Close == maxClose).Date };
+            model.MaxClose = new StatisticValueModel { Value = maxClose, Date = _historicalData.Find(data => data.Close == maxClose).Date };
 
             var minClose = _historicalData.Min(data => data.Close);
-            model.MinClose = new StatisticModel { Value = minClose, Date = _historicalData.Find(data => data.Close == minClose).Date };
+            model.MinClose = new StatisticValueModel { Value = minClose, Date = _historicalData.Find(data => data.Close == minClose).Date };
 
             var maxSpike = _historicalData.Max(data => data.ChangePercent).Value;
-            model.MaxSpike = new StatisticModel { Value = maxSpike, Date = _historicalData.Find(data => data.ChangePercent == maxSpike).Date };
+            model.MaxSpike = new StatisticValueModel { Value = maxSpike, Date = _historicalData.Find(data => data.ChangePercent == maxSpike).Date };
 
             return model;
         }
