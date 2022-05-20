@@ -7,25 +7,23 @@ using Microsoft.Extensions.Logging;
 using PortfolioBI.CaseStudy.Core.Abstracts;
 using PortfolioBI.CaseStudy.Models;
 using PortfolioBI.CaseStudy.Core.Enums;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace PortfolioBI.CaseStudy.Core.Services
 {
     public class SecurityHistoricalDataService : HistoricalDataService<SecurityHistoricDataModel>
     {
-        public SecurityHistoricalDataService(IWebHostEnvironment webHostEnvironment, ILogger logger)
+        public SecurityHistoricalDataService(IWebHostEnvironment webHostEnvironment, ILogger<HistoricalDataService<SecurityHistoricDataModel>> logger)
         :base(webHostEnvironment, logger)
         { 
         }
 
         public override List<SecurityHistoricDataModel> GetHistoricalData(string csvName)
         {
-            if(_historicalData == null)
-            {
-                LoadHistoricalData(csvName);
-                SetChangeAndChangePercent();
-            }
 
-            
+            LoadHistoricalData(csvName);
+            SetChangeAndChangePercent(); 
             return _historicalData;
         }
 
@@ -38,17 +36,18 @@ namespace PortfolioBI.CaseStudy.Core.Services
 
             try
             {
-                var dataValues = historicDataLine.Split(GeneralOptions.CsvSeparator);
-                var model =  new SecurityHistoricDataModel
+                var dataValues = GetFormattedHistoricalDataLine(historicDataLine).Split(GeneralOptions.CsvSeparator);
+
+                var model = new SecurityHistoricDataModel
                 {
-                    Date = DateTime.Parse(dataValues[(int)HistoricDataFields.Date]),
+                    Date = DateTime.Parse(dataValues[(int)HistoricDataFields.Date], new CultureInfo("en-US")),
                     Open = GetHistoricValue(dataValues, HistoricDataFields.Open),
                     High = GetHistoricValue(dataValues, HistoricDataFields.High),
                     Low = GetHistoricValue(dataValues, HistoricDataFields.Low),
-                    Close = GetHistoricValue(dataValues, HistoricDataFields.Close)
-
+                    Close = GetHistoricValue(dataValues, HistoricDataFields.Close),
+                    Volume = int.Parse(dataValues[(int)HistoricDataFields.Volume])
                 };
-                if(dataValues.Count() > 5)
+                if(dataValues.Count() > 6)
                 {
                     model.Change = GetHistoricValue(dataValues, HistoricDataFields.Change);
                     model.ChangePercent = GetHistoricValue(dataValues, HistoricDataFields.ChangePercent);
@@ -68,6 +67,18 @@ namespace PortfolioBI.CaseStudy.Core.Services
             return double.Parse(dataValues[(int)field]);
         }
 
+        private string GetFormattedHistoricalDataLine(string historicDataLine)
+        {
+            var volumePattern = Regex.Match(historicDataLine, "\"(.*?)\"").Value;
+            if (string.IsNullOrEmpty(volumePattern))
+            {
+                return historicDataLine;
+            }
+
+            var formatedVolume = volumePattern.Replace("\"", "").Replace(",", "");
+            return historicDataLine.Replace(volumePattern, formatedVolume);
+        }
+
         private void SetChangeAndChangePercent()
         {
             for (int i = 0; i < _historicalData.Count; i++)
@@ -84,7 +95,7 @@ namespace PortfolioBI.CaseStudy.Core.Services
                     {
                         double previousClose = _historicalData[i - 1].Close;
                         currentData.Change = currentData.Close - previousClose;
-                        currentData.ChangePercent = (currentData.Change / previousClose) * 100;
+                        currentData.ChangePercent = Math.Round((currentData.Change.Value / previousClose) * 100, 2);
                     }
                 }
             }

@@ -7,29 +7,29 @@ using PortfolioBI.CaseStudy.Models;
 
 namespace PortfolioBI.CaseStudy.Core.Services
 {
-    public class SecurityStatisticsDataService : IStatisticsDataService<SecurityStatisticDataModel>
+    public class SecurityStatisticsDataService : IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel>
     {
-        private readonly List<SecurityHistoricDataModel> _historicalData;
-
-        public SecurityStatisticsDataService(List<SecurityHistoricDataModel> historicalData)
-        {
-            _historicalData = historicalData;
-        }
-
-        public SecurityStatisticDataModel GetStatisticsData()
+       
+        public SecurityStatisticDataModel GetStatisticsData(List<SecurityHistoricDataModel> historicalData)
         {
             
             var model = new SecurityStatisticDataModel();
 
-            var maxClose = _historicalData.Max(data => data.Close);
-            model.MaxClose = new StatisticValueModel { Value = maxClose, Date = _historicalData.Find(data => data.Close == maxClose).Date };
+            var maxClose = historicalData.Max(data => data.Close);
+            model.MaxClose = new StatisticValueModel { Value = maxClose, Date = historicalData.Find(data => data.Close == maxClose).Date };
 
-            var minClose = _historicalData.Min(data => data.Close);
-            model.MinClose = new StatisticValueModel { Value = minClose, Date = _historicalData.Find(data => data.Close == minClose).Date };
+            var minClose = historicalData.Min(data => data.Close);
+            model.MinClose = new StatisticValueModel { Value = minClose, Date = historicalData.Find(data => data.Close == minClose).Date };
 
-            var maxSpike = _historicalData.Max(data => data.ChangePercent).Value;
-            model.MaxSpike = new StatisticValueModel { Value = maxSpike, Date = _historicalData.Find(data => data.ChangePercent == maxSpike).Date };
+            var maxSpike = historicalData.Max(data => data.ChangePercent).Value;
+            model.MaxSpike = new StatisticValueModel { Value = maxSpike, Date = historicalData.Find(data => data.ChangePercent == maxSpike).Date };
 
+            //investment return
+            int numberOfShares = 1000;
+            double closeFromMaxSpike = historicalData.Find(data => data.Date == model.MaxSpike.Date).Close;
+            double closeFromTheFirstDay = historicalData.Last().Close;
+            model.InvestmentReturn = Math.Round((closeFromMaxSpike - closeFromTheFirstDay) * numberOfShares, 2);
+            
             return model;
         }
     }

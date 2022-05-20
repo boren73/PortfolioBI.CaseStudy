@@ -12,5 +12,7 @@ namespace PortfolioBI.CaseStudy.Models
         public StatisticValueModel MaxClose { get; set; }
 
         public StatisticValueModel MaxSpike { get; set; }
+
+        public double InvestmentReturn { get; set; }
     }
 }

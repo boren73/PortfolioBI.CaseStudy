@@ -12,7 +12,8 @@ namespace PortfolioBI.CaseStudy.Core.Enums
         High = 2,
         Low = 3,
         Close = 4,
-        Change = 5,
-        ChangePercent = 6
+        Volume = 5,
+        Change = 6,
+        ChangePercent = 7
     }
 }

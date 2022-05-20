@@ -1,0 +1,8 @@
+﻿@model PortfolioBI.CaseStudy.Models.SecurityModel
+<div>
+    <h2>@string.Format("{0}({1})", Model.SecurityName, Model.Id)</h2>
+    <div>The mininimum price was <strong>@string.Format("{0}$", Model.StatisticsData.MinClose.Value)</strong> on a day <strong>@Model.StatisticsData.MinClose.Date.ToString("MM/dd/yyyy")</strong></div>
+    <div>The maxaximum price was <strong>@string.Format("{0}$", Model.StatisticsData.MaxClose.Value)</strong> on a day <strong>@Model.StatisticsData.MaxClose.Date.ToString("MM/dd/yyyy")</strong></div>
+    <div>The most positive change was <strong>@string.Format("{0}%", Model.StatisticsData.MaxSpike.Value)</strong> on a day <strong>@Model.StatisticsData.MaxSpike.Date.ToString("MM/dd/yyyy")</strong></div>
+    <div>Return on investment for 1,000 shares from 1/1/2015 to the date of any one significant price spike: <strong>@string.Format("{0}$", Model.StatisticsData.InvestmentReturn)</strong></div>
+</div>

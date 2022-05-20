@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PortfolioBI.CaseStudy.Core.Interfaces;
+using PortfolioBI.CaseStudy.Core.Services;
 using PortfolioBI.CaseStudy.Models;
 using System;
 using System.Collections.Generic;
@@ -12,15 +14,24 @@ namespace PortfolioBI.CaseStudy.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IHistoricalDataService<SecurityHistoricDataModel> _securityHistoricDataService;
+        private readonly IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> _securityStatisticsDataService;
+        private readonly IDataSourceService _dataSourceService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,
+                              IHistoricalDataService<SecurityHistoricDataModel> securityHistoricDataService,
+                              IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> securityStatisticsDataService,
+                              IDataSourceService dataSourceService)
         {
             _logger = logger;
+            _securityHistoricDataService = securityHistoricDataService;
+            _securityStatisticsDataService = securityStatisticsDataService;
+            _dataSourceService = dataSourceService;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View("Index", GetSecuritiesModel());
         }
 
         public IActionResult Privacy()
@@ -32,6 +43,20 @@ namespace PortfolioBI.CaseStudy.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private List<SecurityModel> GetSecuritiesModel()
+        {
+            List<SecurityModel>listOfSecurities = new List<SecurityModel>();
+            var securities = _dataSourceService.GetData();
+            foreach (var security in securities)
+            {
+                var historicalData = _securityHistoricDataService.GetHistoricalData(security.FileName);
+                var statisticsData = _securityStatisticsDataService.GetStatisticsData(historicalData);
+                listOfSecurities.Add(new SecurityModel(security.Id, security.SecurityName, historicalData, statisticsData));
+            }
+
+            return listOfSecurities;
         }
     }
 }

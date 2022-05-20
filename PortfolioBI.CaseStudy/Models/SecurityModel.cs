@@ -7,7 +7,7 @@ namespace PortfolioBI.CaseStudy.Models
 {
     public class SecurityModel
     {
-        public string ISIN { get; private set; }
+        public string Id { get; private set; }
 
         public string SecurityName { get; private set; }
 
@@ -15,9 +15,9 @@ namespace PortfolioBI.CaseStudy.Models
 
         public SecurityStatisticDataModel StatisticsData { get; private set; }
 
-        public SecurityModel(string isin, string securityName, List<SecurityHistoricDataModel> historicalData, SecurityStatisticDataModel statisticsData)
+        public SecurityModel(string id, string securityName, List<SecurityHistoricDataModel> historicalData, SecurityStatisticDataModel statisticsData)
         {
-            ISIN = isin;
+            Id = id;
             SecurityName = securityName;
             HistoricalData = historicalData;
             StatisticsData = statisticsData;

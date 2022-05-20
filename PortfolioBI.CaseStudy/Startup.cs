@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using PortfolioBI.CaseStudy.Core.Interfaces;
 using PortfolioBI.CaseStudy.Core.Services;
 using PortfolioBI.CaseStudy.Models;
+using PortfolioBI.CaseStudy.Core.Abstracts;
 
 namespace PortfolioBI.CaseStudy
 {
@@ -29,9 +30,14 @@ namespace PortfolioBI.CaseStudy
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
+   provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<DataSourceService>>());
+   //         services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
+   //provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<HistoricalDataService<SecurityHistoricDataModel>>>());
 
-            services.AddTransient<IHistoricalDataService<SecurityHistoricDataModel>, SecurityHistoricalDataService>();
-            services.AddTransient<IStatisticsDataService<SecurityStatisticDataModel>, SecurityStatisticsDataService>();
+            services.AddSingleton<IDataSourceService, DataSourceService>();
+            services.AddScoped<IHistoricalDataService<SecurityHistoricDataModel>, SecurityHistoricalDataService>();
+            services.AddScoped<IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel>, SecurityStatisticsDataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

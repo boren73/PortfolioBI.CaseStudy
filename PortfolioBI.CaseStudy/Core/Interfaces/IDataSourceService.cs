@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PortfolioBI.CaseStudy.Models;
 
 namespace PortfolioBI.CaseStudy.Core.Interfaces
 {
-    public interface IStatisticsDataService<T1, T2>
+    public interface IDataSourceService
     {
-        T1 GetStatisticsData(List<T2> historicalData);
+        List<DataSourceModel> GetData();
     }
 }

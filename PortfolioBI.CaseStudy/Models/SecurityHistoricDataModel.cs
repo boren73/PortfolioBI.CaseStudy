@@ -17,6 +17,8 @@ namespace PortfolioBI.CaseStudy.Models
 
         public double Close { get; set; }
 
+        public int Volume { get; set; }
+
         public double? Change { get; set; }
 
         public double? ChangePercent { get; set; }

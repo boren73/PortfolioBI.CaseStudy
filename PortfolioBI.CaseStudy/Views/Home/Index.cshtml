@@ -1,8 +1,12 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<PortfolioBI.CaseStudy.Models.SecurityModel>
+@{
+    ViewData["Title"] = "Case Study Scenario 1";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    @foreach (var security in Model)
+    {
+        @Html.Partial("_SecurityDetails", security)
+    }
 </div>
