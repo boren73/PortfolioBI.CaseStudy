@@ -14,10 +14,10 @@ namespace PortfolioBI.CaseStudy.Core.Services
     public class DataSourceService : IDataSourceService
     {
         protected readonly IWebHostEnvironment _webHostEnvironment;
-        protected readonly ILogger _logger;
+        protected readonly ILogger<DataSourceService> _logger;
         private List<DataSourceModel> _dataSources;
 
-        public DataSourceService(IWebHostEnvironment webHostEnvironment, ILogger logger)
+        public DataSourceService(IWebHostEnvironment webHostEnvironment, ILogger<DataSourceService> logger)
         {
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;

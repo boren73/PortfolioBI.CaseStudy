@@ -1,4 +1,7 @@
 ﻿@model PortfolioBI.CaseStudy.Models.SecurityModel
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Charts
+
 <div>
     <h2>@string.Format("{0}({1})", Model.SecurityName, Model.Id)</h2>
     <div>The mininimum price was <strong>@string.Format("{0}$", Model.StatisticsData.MinClose.Value)</strong> on a day <strong>@Model.StatisticsData.MinClose.Date.ToString("MM/dd/yyyy")</strong></div>
@@ -6,3 +9,8 @@
     <div>The most positive change was <strong>@string.Format("{0}%", Model.StatisticsData.MaxSpike.Value)</strong> on a day <strong>@Model.StatisticsData.MaxSpike.Date.ToString("MM/dd/yyyy")</strong></div>
     <div>Return on investment for 1,000 shares from 1/1/2015 to the date of any one significant price spike: <strong>@string.Format("{0}$", Model.StatisticsData.InvestmentReturn)</strong></div>
 </div>
+<SfStockChart>
+    <StockChartSeriesCollection>
+        <StockChartSeries DataSource="@Model.HistoricalChartData" Type="ChartSeriesType.Candle" XName="Date" YName="Close" High="High" Low="Low" Open="Open" Close="Close" Volume="Volume"></StockChartSeries>
+    </StockChartSeriesCollection>
+</SfStockChart>

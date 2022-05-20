@@ -14,6 +14,7 @@ using PortfolioBI.CaseStudy.Core.Interfaces;
 using PortfolioBI.CaseStudy.Core.Services;
 using PortfolioBI.CaseStudy.Models;
 using PortfolioBI.CaseStudy.Core.Abstracts;
+using Syncfusion.Blazor;
 
 namespace PortfolioBI.CaseStudy
 {
@@ -30,14 +31,19 @@ namespace PortfolioBI.CaseStudy
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
-   provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<DataSourceService>>());
+   //         services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
+   //provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<DataSourceService>>());
    //         services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
    //provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<HistoricalDataService<SecurityHistoricDataModel>>>());
 
             services.AddSingleton<IDataSourceService, DataSourceService>();
             services.AddScoped<IHistoricalDataService<SecurityHistoricDataModel>, SecurityHistoricalDataService>();
             services.AddScoped<IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel>, SecurityStatisticsDataService>();
+            services.AddScoped<IHistoricalChartDataService<ChartData, SecurityHistoricDataModel>, SecurityChartDataService>();
+
+            //for chart
+            services.AddServerSideBlazor();
+            services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

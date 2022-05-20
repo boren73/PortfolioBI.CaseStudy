@@ -15,12 +15,19 @@ namespace PortfolioBI.CaseStudy.Models
 
         public SecurityStatisticDataModel StatisticsData { get; private set; }
 
-        public SecurityModel(string id, string securityName, List<SecurityHistoricDataModel> historicalData, SecurityStatisticDataModel statisticsData)
+        public List<ChartData> HistoricalChartData { get; private set; }
+
+        public SecurityModel(string id, 
+                             string securityName, 
+                             List<SecurityHistoricDataModel> historicalData, 
+                             SecurityStatisticDataModel statisticsData,
+                             List<ChartData> historicalChartData)
         {
             Id = id;
             SecurityName = securityName;
             HistoricalData = historicalData;
             StatisticsData = statisticsData;
+            historicalChartData = historicalChartData;
             
         }
     }

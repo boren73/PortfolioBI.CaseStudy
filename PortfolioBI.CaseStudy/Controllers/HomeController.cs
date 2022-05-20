@@ -17,16 +17,19 @@ namespace PortfolioBI.CaseStudy.Controllers
         private readonly IHistoricalDataService<SecurityHistoricDataModel> _securityHistoricDataService;
         private readonly IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> _securityStatisticsDataService;
         private readonly IDataSourceService _dataSourceService;
+        private readonly IHistoricalChartDataService<ChartData, SecurityHistoricDataModel> _chartDataService;
 
         public HomeController(ILogger<HomeController> logger,
                               IHistoricalDataService<SecurityHistoricDataModel> securityHistoricDataService,
                               IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> securityStatisticsDataService,
-                              IDataSourceService dataSourceService)
+                              IDataSourceService dataSourceService,
+                              IHistoricalChartDataService<ChartData, SecurityHistoricDataModel> chartDataService)
         {
             _logger = logger;
             _securityHistoricDataService = securityHistoricDataService;
             _securityStatisticsDataService = securityStatisticsDataService;
             _dataSourceService = dataSourceService;
+            _chartDataService = chartDataService;
         }
 
         public IActionResult Index()
@@ -53,7 +56,8 @@ namespace PortfolioBI.CaseStudy.Controllers
             {
                 var historicalData = _securityHistoricDataService.GetHistoricalData(security.FileName);
                 var statisticsData = _securityStatisticsDataService.GetStatisticsData(historicalData);
-                listOfSecurities.Add(new SecurityModel(security.Id, security.SecurityName, historicalData, statisticsData));
+                var chartData = _chartDataService.GetChartData(historicalData);
+                listOfSecurities.Add(new SecurityModel(security.Id, security.SecurityName, historicalData, statisticsData, chartData));
             }
 
             return listOfSecurities;
