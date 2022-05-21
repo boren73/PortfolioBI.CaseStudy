@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 
 namespace PortfolioBI.CaseStudy.Models
 {
-    public class DataSourceModel
+    public class SecuritySettingsModel
     {
         public string Id { get; set; }
 
         public string SecurityName { get; set; }
 
         public string FileName { get; set; }
+
+        public ReturnOnInvestmentOptionsModel ROI { get; set; }
     }
 }

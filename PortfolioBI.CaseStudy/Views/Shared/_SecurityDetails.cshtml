@@ -1,4 +1,6 @@
 ﻿@model PortfolioBI.CaseStudy.Models.SecurityModel
+@using System.Globalization
+ 
 <h2>@string.Format("{0}({1})", Model.SecurityName, Model.Id)</h2>
 <div class="container">
     <div class="row">
@@ -19,7 +21,7 @@
         </div>
     </div>
     <div>
-        Return On Investment(ROI) for 1,000 shares from 1/1/2015 to the date of significant price spike is <strong>@string.Format("{0}%", Model.StatisticsData.ROI.ToString("N2"))</strong>
+        Return On Investment(ROI) for @Model.StatisticsData.ReturnOnInvestment.NumberOfShares.ToString("N0",new CultureInfo("en-US")) shares from @Model.StatisticsData.ReturnOnInvestment.InvestedDate.ToString("MM/dd/yyyy") to the date of significant price spike(@Model.StatisticsData.ReturnOnInvestment.Date.ToString("MM/dd/yyyy")) is <strong>@string.Format("{0}%", Model.StatisticsData.ReturnOnInvestment.Value.ToString("N2"))</strong>
     </div>
 </div>
 @(Html.DevExtreme().Chart()

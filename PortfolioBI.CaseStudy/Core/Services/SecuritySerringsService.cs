@@ -11,19 +11,19 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace PortfolioBI.CaseStudy.Core.Services
 {
-    public class DataSourceService : IDataSourceService
+    public class SecuritySerringsService : ISecuritySettingsService
     {
         protected readonly IWebHostEnvironment _webHostEnvironment;
-        protected readonly ILogger<DataSourceService> _logger;
-        private List<DataSourceModel> _dataSources;
+        protected readonly ILogger<SecuritySerringsService> _logger;
+        private List<SecuritySettingsModel> _dataSources;
 
-        public DataSourceService(IWebHostEnvironment webHostEnvironment, ILogger<DataSourceService> logger)
+        public SecuritySerringsService(IWebHostEnvironment webHostEnvironment, ILogger<SecuritySerringsService> logger)
         {
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
         }
 
-        public List<DataSourceModel> GetData()
+        public List<SecuritySettingsModel> GetSettingsData()
         { 
             if(_dataSources == null)
             {
@@ -38,7 +38,7 @@ namespace PortfolioBI.CaseStudy.Core.Services
             var securitiesFile = Path.Combine(webRootPath, "Configuration", "securities.json");
             try
             {
-                _dataSources  = JsonConvert.DeserializeObject<List<DataSourceModel>>(File.ReadAllText(securitiesFile));
+                _dataSources  = JsonConvert.DeserializeObject<List<SecuritySettingsModel>>(File.ReadAllText(securitiesFile));
             }
             catch(Exception ex)
             {

@@ -6,8 +6,8 @@ using PortfolioBI.CaseStudy.Models;
 
 namespace PortfolioBI.CaseStudy.Core.Interfaces
 {
-    public interface IDataSourceService
+    public interface ISecuritySettingsService
     {
-        List<DataSourceModel> GetData();
+        List<SecuritySettingsModel> GetSettingsData();
     }
 }

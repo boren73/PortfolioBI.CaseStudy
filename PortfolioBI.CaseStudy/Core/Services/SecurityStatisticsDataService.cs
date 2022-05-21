@@ -9,8 +9,13 @@ namespace PortfolioBI.CaseStudy.Core.Services
 {
     public class SecurityStatisticsDataService : IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel>
     {
-       
-        public SecurityStatisticDataModel GetStatisticsData(List<SecurityHistoricDataModel> historicalData)
+        private readonly ISecuritySettingsService _dataSourceService;
+        public SecurityStatisticsDataService(ISecuritySettingsService dataSourceService)
+        {
+            _dataSourceService = dataSourceService;
+        }
+
+        public SecurityStatisticDataModel GetStatisticsData(string id, List<SecurityHistoricDataModel> historicalData)
         {
             
             var model = new SecurityStatisticDataModel();
@@ -26,12 +31,15 @@ namespace PortfolioBI.CaseStudy.Core.Services
             model.MaxSpike = new StatisticSpikeValueModel { PercentValue = maxSpike.ChangePercent.Value, Value = maxSpike.Change.Value, Date = maxSpike.Date };
 
             //Return on Investment(ROI)
-            int numberOfShares = 1000;
-            double currentInvestment = historicalData.Find(data => data.Date == model.MaxSpike.Date).Close * numberOfShares;
-            double invested = historicalData.Last().Close * numberOfShares;
-            double roi = ((currentInvestment - invested) / invested) * 100;
-            model.ROI = Math.Round(roi, 2);
-            
+            var securitySettings = _dataSourceService.GetSettingsData().Find(s => s.Id == id);
+            if (securitySettings != null)
+            { 
+                int numberOfShares = securitySettings.ROI.NumberOfShares;
+                double currentInvestment = historicalData.Find(data => data.Date == model.MaxSpike.Date).Close * numberOfShares;
+                double invested = historicalData.FindLast(data => data.Date >= securitySettings.ROI.Invested).Close * numberOfShares;
+                double roi = ((currentInvestment - invested) / invested) * 100;
+                model.ReturnOnInvestment = new StatisticROIValueModel { Value = Math.Round(roi, 2), Date = maxSpike.Date, InvestedDate = securitySettings.ROI.Invested, NumberOfShares = numberOfShares };
+            }
             return model;
         }
     }

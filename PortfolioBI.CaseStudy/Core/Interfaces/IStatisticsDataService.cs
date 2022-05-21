@@ -7,6 +7,6 @@ namespace PortfolioBI.CaseStudy.Core.Interfaces
 {
     public interface IStatisticsDataService<T1, T2>
     {
-        T1 GetStatisticsData(List<T2> historicalData);
+        T1 GetStatisticsData(string id, List<T2> historicalData);
     }
 }

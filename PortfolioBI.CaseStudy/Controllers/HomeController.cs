@@ -17,19 +17,19 @@ namespace PortfolioBI.CaseStudy.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHistoricalDataService<SecurityHistoricDataModel> _securityHistoricDataService;
         private readonly IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> _securityStatisticsDataService;
-        private readonly IDataSourceService _dataSourceService;
+        private readonly List<SecuritySettingsModel>  _securitiesSettings;
         private readonly IHistoricalChartDataService<object, SecurityHistoricDataModel> _chartDataService;
 
         public HomeController(ILogger<HomeController> logger,
                               IHistoricalDataService<SecurityHistoricDataModel> securityHistoricDataService,
                               IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> securityStatisticsDataService,
-                              IDataSourceService dataSourceService,
+                              ISecuritySettingsService dataSourceService,
                               IHistoricalChartDataService<object, SecurityHistoricDataModel> chartDataService)
         {
             _logger = logger;
             _securityHistoricDataService = securityHistoricDataService;
             _securityStatisticsDataService = securityStatisticsDataService;
-            _dataSourceService = dataSourceService;
+            _securitiesSettings = dataSourceService.GetSettingsData();
             _chartDataService = chartDataService;
         }
 
@@ -59,11 +59,11 @@ namespace PortfolioBI.CaseStudy.Controllers
         private List<SecurityModel> GetSecuritiesModel()
         {
             List<SecurityModel>listOfSecurities = new List<SecurityModel>();
-            var securities = _dataSourceService.GetData();
-            foreach (var security in securities)
+            
+            foreach (var security in _securitiesSettings)
             {
                 var historicalData = _securityHistoricDataService.GetHistoricalData(security.FileName);
-                var statisticsData = _securityStatisticsDataService.GetStatisticsData(historicalData);
+                var statisticsData = _securityStatisticsDataService.GetStatisticsData(security.Id, historicalData);
                 var chartData = _chartDataService.GetChartData(historicalData);
                 listOfSecurities.Add(new SecurityModel(security.Id, security.SecurityName, historicalData, statisticsData, chartData));
             }
@@ -73,15 +73,14 @@ namespace PortfolioBI.CaseStudy.Controllers
 
         private SecurityModel GetSecurityModel(string id)
         {
-            var securities = _dataSourceService.GetData();
-            var security = securities.Find(s => s.Id == id);
+            var security = _securitiesSettings.Find(s => s.Id == id);
             if(security == null)
             {
                 return null;
             }
 
             var historicalData = _securityHistoricDataService.GetHistoricalData(security.FileName);
-            var statisticsData = _securityStatisticsDataService.GetStatisticsData(historicalData);
+            var statisticsData = _securityStatisticsDataService.GetStatisticsData(id, historicalData);
             var chartData = _chartDataService.GetChartData(historicalData);
             return new SecurityModel(security.Id, security.SecurityName, historicalData, statisticsData, chartData);
         }

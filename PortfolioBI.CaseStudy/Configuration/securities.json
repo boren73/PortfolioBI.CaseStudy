@@ -2,11 +2,20 @@
   {
     "id": "NYSE:GLW",
     "securityName": "Corning, Inc.",
-    "fileName": "NYSE_GLW_2015.csv"
+    "fileName": "NYSE_GLW_2015.csv",
+    "roi": {
+      "invested": "1/1/2015",
+      "numberOfshares":  "1000"
+    }
   },
   {
     "id": "NYSE:GRUB",
     "securityName": "Grubhub, Inc.",
-    "fileName": "NYSE_GRUB_2015.csv"
+    "fileName": "NYSE_GRUB_2015.csv",
+    "roi": {
+      "invested": "1/1/2015",
+      "numberOfshares": "1000"
+    }
+
   }
 ]

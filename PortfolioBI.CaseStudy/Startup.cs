@@ -35,7 +35,7 @@ namespace PortfolioBI.CaseStudy
    //         services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
    //provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<HistoricalDataService<SecurityHistoricDataModel>>>());
 
-            services.AddSingleton<IDataSourceService, DataSourceService>();
+            services.AddSingleton<ISecuritySettingsService, SecuritySerringsService>();
             services.AddScoped<IHistoricalDataService<SecurityHistoricDataModel>, SecurityHistoricalDataService>();
             services.AddScoped<IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel>, SecurityStatisticsDataService>();
             services.AddScoped<IHistoricalChartDataService<object, SecurityHistoricDataModel>, SecurityChartDataService>();
