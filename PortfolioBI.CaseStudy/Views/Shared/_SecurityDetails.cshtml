@@ -19,7 +19,7 @@
         </div>
     </div>
     <div>
-        Returned investment for 1,000 shares from 1/1/2015 to the date of significant price spike: <strong>@string.Format("{0}$", Model.StatisticsData.InvestmentReturn.ToString("N2"))</strong>
+        Return On Investment(ROI) for 1,000 shares from 1/1/2015 to the date of significant price spike is <strong>@string.Format("{0}%", Model.StatisticsData.ROI.ToString("N2"))</strong>
     </div>
 </div>
 @(Html.DevExtreme().Chart()

@@ -25,11 +25,12 @@ namespace PortfolioBI.CaseStudy.Core.Services
             var maxSpike = historicalData.Find(data => data.ChangePercent == maxChangePercent);
             model.MaxSpike = new StatisticSpikeValueModel { PercentValue = maxSpike.ChangePercent.Value, Value = maxSpike.Change.Value, Date = maxSpike.Date };
 
-            //investment return
+            //Return on Investment(ROI)
             int numberOfShares = 1000;
-            double closeFromMaxSpike = historicalData.Find(data => data.Date == model.MaxSpike.Date).Close;
-            double closeFromTheFirstDay = historicalData.Last().Close;
-            model.InvestmentReturn = Math.Round((closeFromMaxSpike - closeFromTheFirstDay) * numberOfShares, 2);
+            double currentInvestment = historicalData.Find(data => data.Date == model.MaxSpike.Date).Close * numberOfShares;
+            double invested = historicalData.Last().Close * numberOfShares;
+            double roi = ((currentInvestment - invested) / invested) * 100;
+            model.ROI = Math.Round(roi, 2);
             
             return model;
         }
