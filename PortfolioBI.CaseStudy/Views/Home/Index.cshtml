@@ -4,7 +4,6 @@
 }
 
 <div>
-    <h1 class="display-4">@ViewData["Title"]</h1>
     @foreach (var security in Model)
     {
         @Html.Partial("_SecurityDetails", security)

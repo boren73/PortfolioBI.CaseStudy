@@ -59,13 +59,7 @@ namespace PortfolioBI.CaseStudy
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            //app.UseStaticFiles(new StaticFileOptions
-            //{
-            //    FileProvider = new PhysicalFileProvider(
-            //Path.Combine(env.ContentRootPath, "DataSources")),
-            //    RequestPath = "/DataSources"
-            //});
-
+          
             app.UseRouting();
 
             app.UseAuthorization();

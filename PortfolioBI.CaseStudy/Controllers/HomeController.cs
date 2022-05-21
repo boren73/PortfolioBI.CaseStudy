@@ -37,6 +37,13 @@ namespace PortfolioBI.CaseStudy.Controllers
         {
             return View("Index", GetSecuritiesModel());
         }
+        [Route("Details/{id}")]
+        public IActionResult Details(string id)
+        {
+            var securityModel = GetSecurityModel(id);
+
+            return securityModel != null ? View("Details", securityModel) : View("ErrorSymbol");
+        }
 
         public IActionResult Privacy()
         {
@@ -62,6 +69,21 @@ namespace PortfolioBI.CaseStudy.Controllers
             }
 
             return listOfSecurities;
+        }
+
+        private SecurityModel GetSecurityModel(string id)
+        {
+            var securities = _dataSourceService.GetData();
+            var security = securities.Find(s => s.Id == id);
+            if(security == null)
+            {
+                return null;
+            }
+
+            var historicalData = _securityHistoricDataService.GetHistoricalData(security.FileName);
+            var statisticsData = _securityStatisticsDataService.GetStatisticsData(historicalData);
+            var chartData = _chartDataService.GetChartData(historicalData);
+            return new SecurityModel(security.Id, security.SecurityName, historicalData, statisticsData, chartData);
         }
     }
 }
