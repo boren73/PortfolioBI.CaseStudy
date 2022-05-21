@@ -9,10 +9,10 @@ namespace PortfolioBI.CaseStudy.Core.Services
 {
     public class SecurityStatisticsDataService : IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel>
     {
-        private readonly ISecuritySettingsService _dataSourceService;
-        public SecurityStatisticsDataService(ISecuritySettingsService dataSourceService)
+        private readonly ISecuritySettingsService _securitySettingsService;
+        public SecurityStatisticsDataService(ISecuritySettingsService securitySettingsService)
         {
-            _dataSourceService = dataSourceService;
+            _securitySettingsService = securitySettingsService;
         }
 
         public SecurityStatisticDataModel GetStatisticsData(string id, List<SecurityHistoricDataModel> historicalData)
@@ -31,7 +31,7 @@ namespace PortfolioBI.CaseStudy.Core.Services
             model.MaxSpike = new StatisticSpikeValueModel { PercentValue = maxSpike.ChangePercent.Value, Value = maxSpike.Change.Value, Date = maxSpike.Date };
 
             //Return on Investment(ROI)
-            var securitySettings = _dataSourceService.GetSettingsData().Find(s => s.Id == id);
+            var securitySettings = _securitySettingsService.GetSettingsData().Find(s => s.Id == id);
             if (securitySettings != null)
             { 
                 int numberOfShares = securitySettings.ROI.NumberOfShares;

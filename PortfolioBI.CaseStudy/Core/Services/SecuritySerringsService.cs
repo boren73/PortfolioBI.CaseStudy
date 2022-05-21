@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
+using PortfolioBI.CaseStudy.Core.Enums;
 
 namespace PortfolioBI.CaseStudy.Core.Services
 {
@@ -15,7 +16,7 @@ namespace PortfolioBI.CaseStudy.Core.Services
     {
         protected readonly IWebHostEnvironment _webHostEnvironment;
         protected readonly ILogger<SecuritySerringsService> _logger;
-        private List<SecuritySettingsModel> _dataSources;
+        private List<SecuritySettingsModel> _securitySettings;
 
         public SecuritySerringsService(IWebHostEnvironment webHostEnvironment, ILogger<SecuritySerringsService> logger)
         {
@@ -25,20 +26,20 @@ namespace PortfolioBI.CaseStudy.Core.Services
 
         public List<SecuritySettingsModel> GetSettingsData()
         { 
-            if(_dataSources == null)
+            if(_securitySettings == null)
             {
                 LoadData();
             }
-            return _dataSources;
+            return _securitySettings;
         }
 
         private void LoadData()
         { 
             string webRootPath = _webHostEnvironment.ContentRootPath;
-            var securitiesFile = Path.Combine(webRootPath, "Configuration", "securities.json");
+            var securitiesFile = Path.Combine(webRootPath, "Configuration", GeneralOptions.SecuritySettingsFileName);
             try
             {
-                _dataSources  = JsonConvert.DeserializeObject<List<SecuritySettingsModel>>(File.ReadAllText(securitiesFile));
+                _securitySettings  = JsonConvert.DeserializeObject<List<SecuritySettingsModel>>(File.ReadAllText(securitiesFile));
             }
             catch(Exception ex)
             {

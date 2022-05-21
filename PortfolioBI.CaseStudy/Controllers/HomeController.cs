@@ -23,13 +23,13 @@ namespace PortfolioBI.CaseStudy.Controllers
         public HomeController(ILogger<HomeController> logger,
                               IHistoricalDataService<SecurityHistoricDataModel> securityHistoricDataService,
                               IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> securityStatisticsDataService,
-                              ISecuritySettingsService dataSourceService,
+                              ISecuritySettingsService securitySettingsService,
                               IHistoricalChartDataService<object, SecurityHistoricDataModel> chartDataService)
         {
             _logger = logger;
             _securityHistoricDataService = securityHistoricDataService;
             _securityStatisticsDataService = securityStatisticsDataService;
-            _securitiesSettings = dataSourceService.GetSettingsData();
+            _securitiesSettings = securitySettingsService.GetSettingsData();
             _chartDataService = chartDataService;
         }
 

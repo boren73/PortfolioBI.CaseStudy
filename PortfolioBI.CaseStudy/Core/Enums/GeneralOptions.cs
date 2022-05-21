@@ -8,5 +8,7 @@ namespace PortfolioBI.CaseStudy.Core.Enums
     public class GeneralOptions
     {
         public static string CsvSeparator = ",";
+
+        public static string SecuritySettingsFileName = "securities.settings.json";
     }
 }
