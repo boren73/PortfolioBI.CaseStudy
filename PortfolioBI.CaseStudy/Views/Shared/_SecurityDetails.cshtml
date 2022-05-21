@@ -1,16 +1,123 @@
 ﻿@model PortfolioBI.CaseStudy.Models.SecurityModel
-@using Syncfusion.Blazor
-@using Syncfusion.Blazor.Charts
-
-<div>
-    <h2>@string.Format("{0}({1})", Model.SecurityName, Model.Id)</h2>
-    <div>The mininimum price was <strong>@string.Format("{0}$", Model.StatisticsData.MinClose.Value)</strong> on a day <strong>@Model.StatisticsData.MinClose.Date.ToString("MM/dd/yyyy")</strong></div>
-    <div>The maxaximum price was <strong>@string.Format("{0}$", Model.StatisticsData.MaxClose.Value)</strong> on a day <strong>@Model.StatisticsData.MaxClose.Date.ToString("MM/dd/yyyy")</strong></div>
-    <div>The most positive change was <strong>@string.Format("{0}%", Model.StatisticsData.MaxSpike.Value)</strong> on a day <strong>@Model.StatisticsData.MaxSpike.Date.ToString("MM/dd/yyyy")</strong></div>
-    <div>Return on investment for 1,000 shares from 1/1/2015 to the date of any one significant price spike: <strong>@string.Format("{0}$", Model.StatisticsData.InvestmentReturn)</strong></div>
+<h2>@string.Format("{0}({1})", Model.SecurityName, Model.Id)</h2>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <span class="label">Lowest price:</span>
+            <span class="price low">@string.Format("{0}$", @Model.StatisticsData.MinClose.Value.ToString("N2"))</span>
+            <span class="date">@Model.StatisticsData.MinClose.Date.ToString("MM/dd/yyyy")</span>
+        </div>
+        <div class="col">
+            <span class="label">Highest price:</span>
+            <span class="price high">@string.Format("{0}$", Model.StatisticsData.MaxClose.Value.ToString("N2"))</span>
+            <span class="date">@Model.StatisticsData.MaxClose.Date.ToString("MM/dd/yyyy")</span>
+        </div>
+        <div class="col">
+            <span class="label">Most positive change:</span>
+            <span class="price spike">@string.Format("+{0}({1}%)", Model.StatisticsData.MaxSpike.Value.ToString("N2"), Model.StatisticsData.MaxSpike.PercentValue.ToString("N2"))</span>
+            <span class="date">@Model.StatisticsData.MaxSpike.Date.ToString("MM/dd/yyyy")</span>
+        </div>
+    </div>
+    <div>
+        Returned investment for 1,000 shares from 1/1/2015 to the date of significant price spike: <strong>@string.Format("{0}$", Model.StatisticsData.InvestmentReturn.ToString("N2"))</strong>
+    </div>
 </div>
-<SfStockChart>
-    <StockChartSeriesCollection>
-        <StockChartSeries DataSource="@Model.HistoricalChartData" Type="ChartSeriesType.Candle" XName="Date" YName="Close" High="High" Low="Low" Open="Open" Close="Close" Volume="Volume"></StockChartSeries>
-    </StockChartSeriesCollection>
-</SfStockChart>
+@(Html.DevExtreme().Chart()
+    .ID($"chart_{Model.Id}")
+    .Title("Stock Price")
+    .Legend(l => l.Visible(false))
+    .CommonSeriesSettings(s => s
+        .ArgumentField("Date")
+        .Type(SeriesType.Stock)
+    )
+    .Series(s => s
+        .Add()
+        .Name(Model.Id)
+        .OpenValueField("O")
+        .HighValueField("H")
+        .LowValueField("L")
+        .CloseValueField("C")
+        .Reduction(r => r.Color("red"))
+        .ShowInLegend(true)
+    )
+    .ValueAxis(a => a
+        .Add()
+        .TickInterval(1)
+        .Title(t => t.Text("US dollars"))
+        .Label(l => l.Format(f => f
+            .Type(Format.Currency)
+            .Precision(0)
+        ))
+    )
+    .ArgumentAxis(a => a
+        .WorkdaysOnly(true)
+        .Label(l => l.Format(Format.ShortDate))
+    )
+    .Export(e => e.Enabled(true))
+    .Tooltip(t => t
+        .Enabled(true)
+        .Location(ChartTooltipLocation.Edge)
+        .CustomizeTooltip(@<text>
+            function (arg) {
+                var content = new Array();
+                var changePrefix = Number(arg.point.data.CH) > 0 ? '+' : '';
+                var changeColor = Number(arg.point.data.CH) > 0 ? 'green' : (Number(arg.point.data.CH) == 0 ? 'black' : 'red');
+                content.push('<table style="width:100%">');
+                content.push('<tr><td>Date:</td><td align="right">' + arg.point.data.Date.toDateString() + '</td></tr>');
+                content.push('<tr><td>Open:</td><td align="right">' + arg.openValue + '$</td></tr>');
+                content.push('<tr><td>Close:</td><td align="right">' + arg.closeValue + '$</td></tr>');
+                content.push('<tr><td>High:</td><td align="right">' + arg.highValue + '$</td></tr>');
+                content.push('<tr><td>Low:</td><td align="right">' + arg.lowValue + '$</td></tr>');
+                content.push('<tr><td>Change:</td><td align="right" style="color:' + changeColor + '">'+ changePrefix + arg.point.data.CH+ '</td></tr>');
+                content.push('<tr><td>ChangePercent:</td><td align="right" style="color:' + changeColor + '">' + arg.point.data.CHP + '%</td></tr>');
+                return {
+                    html: content.join('')
+                };
+            }
+        </text>)
+
+    )
+      .CommonAnnotationSettings(s => s
+        .Series(Model.Id)
+        .Type(AnnotationType.Image)
+        .Font(f => f
+            .Size(16)
+            .Weight(600)
+        )
+        .CustomizeTooltip(@<text>
+            function (e) {
+                console.log(e);
+                return {
+                    html: e.description
+                };
+            }
+        </text>)
+    )
+    .Annotations(a =>
+    {
+        a.Add()
+        .Opacity(0.6)
+        .Font(f => { f.Color("green"); })
+        .Argument(Model.StatisticsData.MaxClose.Date)
+        .Type(AnnotationType.Text)
+        .Description($"The highest price was {Model.StatisticsData.MaxClose.Value.ToString("N2")}$ on a day {Model.StatisticsData.MaxClose.Date.ToString("MM/dd/yyyy")}")
+        .Text("Max");
+
+        a.Add()
+        .Opacity(0.6)
+       .Font(f => { f.Color("red"); })
+        .Argument(Model.StatisticsData.MinClose.Date)
+        .Type(AnnotationType.Text)
+        .Description($"The lowest price was  {Model.StatisticsData.MinClose.Value.ToString("N2")}$ on a day {Model.StatisticsData.MinClose.Date.ToString("MM/dd/yyyy")}")
+        .Text("Min");
+
+        a.Add()
+        .Opacity(0.6)
+        .Font(f => { f.Color("blue"); })
+        .Argument(Model.StatisticsData.MaxSpike.Date)
+        .Type(AnnotationType.Text)
+        .Description($"The most positive change was +{@Model.StatisticsData.MaxSpike.Value.ToString("N2")}({Model.StatisticsData.MaxSpike.PercentValue.ToString("N2")}%) on a day {Model.StatisticsData.MaxSpike.Date.ToString("MM/dd/yyyy")}")
+        .Text("Spike");
+    })
+    .DataSource(Model.HistoricalChartData)
+)

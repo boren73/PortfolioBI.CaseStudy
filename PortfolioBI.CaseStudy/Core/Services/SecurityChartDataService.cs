@@ -7,15 +7,15 @@ using PortfolioBI.CaseStudy.Models;
 
 namespace PortfolioBI.CaseStudy.Core.Services
 {
-    public class SecurityChartDataService : IHistoricalChartDataService<ChartData, SecurityHistoricDataModel>
+    public class SecurityChartDataService : IHistoricalChartDataService<object, SecurityHistoricDataModel>
     {
-        public List<ChartData> GetChartData(List<SecurityHistoricDataModel> historicalData)
+        public List<object> GetChartData(List<SecurityHistoricDataModel> historicalData)
         {
-            List<ChartData> list = new List<ChartData>();
+            List<object> list = new List<object>();
 
             foreach (var data in historicalData)
             {
-                list.Add(new ChartData { Open = data.Open, High = data.High, Low = data.Low, Close = data.Close, Volume = data.Volume });
+                list.Add(new {Date = data.Date, O = data.Open, H = data.High, L = data.Low, C = data.Close, CH = data.Change, CHP = data.ChangePercent, V = data.Volume });
             }
             return list;
         }

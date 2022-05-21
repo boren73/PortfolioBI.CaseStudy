@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using PortfolioBI.CaseStudy.Core.Interfaces;
 using PortfolioBI.CaseStudy.Core.Services;
 using PortfolioBI.CaseStudy.Models;
@@ -17,13 +18,13 @@ namespace PortfolioBI.CaseStudy.Controllers
         private readonly IHistoricalDataService<SecurityHistoricDataModel> _securityHistoricDataService;
         private readonly IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> _securityStatisticsDataService;
         private readonly IDataSourceService _dataSourceService;
-        private readonly IHistoricalChartDataService<ChartData, SecurityHistoricDataModel> _chartDataService;
+        private readonly IHistoricalChartDataService<object, SecurityHistoricDataModel> _chartDataService;
 
         public HomeController(ILogger<HomeController> logger,
                               IHistoricalDataService<SecurityHistoricDataModel> securityHistoricDataService,
                               IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> securityStatisticsDataService,
                               IDataSourceService dataSourceService,
-                              IHistoricalChartDataService<ChartData, SecurityHistoricDataModel> chartDataService)
+                              IHistoricalChartDataService<object, SecurityHistoricDataModel> chartDataService)
         {
             _logger = logger;
             _securityHistoricDataService = securityHistoricDataService;

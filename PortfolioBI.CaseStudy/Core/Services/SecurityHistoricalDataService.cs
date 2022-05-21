@@ -94,7 +94,7 @@ namespace PortfolioBI.CaseStudy.Core.Services
                     else
                     {
                         double previousClose = _historicalData[i - 1].Close;
-                        currentData.Change = currentData.Close - previousClose;
+                        currentData.Change = Math.Round(currentData.Close - previousClose, 2);
                         currentData.ChangePercent = Math.Round((currentData.Change.Value / previousClose) * 100, 2);
                     }
                 }

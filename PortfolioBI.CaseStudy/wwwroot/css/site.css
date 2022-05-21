@@ -27,7 +27,7 @@ a {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+  font-size: 2em;
 }
 @media (min-width: 768px) {
   html {
@@ -68,4 +68,47 @@ body {
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+h2 {
+    font-size: 170%;
+    font-weight: bold;
+    text-align: left;
+    padding: 35px 0 7px 0;
+}
+.row > .col {
+    border-right: solid 1px #ccc;
+}
+.row > .col:last-child {
+    border-right: none;
+}
+.row > .col > span{
+    display: block;
+}
+.row > .col > span.price{
+    text-align: center;
+    font-size: 130%;
+}
+
+.row > .col > span.price.low{
+    color: red;
+}
+
+.row > .col > span.price.high {
+    color: green;
+}
+
+.row > .col > span.price.spike {
+    color: blue;
+}
+
+.row > .col > span.date {
+    text-align: right;
+    font-size: 100%;
+    color: gray;
+}
+
+.container > .row {
+    background: linear-gradient(to bottom, rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%);
+    border: solid 1px #ccc;
 }

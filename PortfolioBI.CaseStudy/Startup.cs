@@ -14,7 +14,6 @@ using PortfolioBI.CaseStudy.Core.Interfaces;
 using PortfolioBI.CaseStudy.Core.Services;
 using PortfolioBI.CaseStudy.Models;
 using PortfolioBI.CaseStudy.Core.Abstracts;
-using Syncfusion.Blazor;
 
 namespace PortfolioBI.CaseStudy
 {
@@ -30,7 +29,7 @@ namespace PortfolioBI.CaseStudy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
    //         services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
    //provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<DataSourceService>>());
    //         services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
@@ -39,11 +38,10 @@ namespace PortfolioBI.CaseStudy
             services.AddSingleton<IDataSourceService, DataSourceService>();
             services.AddScoped<IHistoricalDataService<SecurityHistoricDataModel>, SecurityHistoricalDataService>();
             services.AddScoped<IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel>, SecurityStatisticsDataService>();
-            services.AddScoped<IHistoricalChartDataService<ChartData, SecurityHistoricDataModel>, SecurityChartDataService>();
+            services.AddScoped<IHistoricalChartDataService<object, SecurityHistoricDataModel>, SecurityChartDataService>();
 
             //for chart
             services.AddServerSideBlazor();
-            services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,12 +58,13 @@ namespace PortfolioBI.CaseStudy
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-            Path.Combine(env.ContentRootPath, "DataSources")),
-                RequestPath = "/DataSources"
-            });
+            app.UseStaticFiles();
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //Path.Combine(env.ContentRootPath, "DataSources")),
+            //    RequestPath = "/DataSources"
+            //});
 
             app.UseRouting();
 

@@ -21,8 +21,9 @@ namespace PortfolioBI.CaseStudy.Core.Services
             var minClose = historicalData.Min(data => data.Close);
             model.MinClose = new StatisticValueModel { Value = minClose, Date = historicalData.Find(data => data.Close == minClose).Date };
 
-            var maxSpike = historicalData.Max(data => data.ChangePercent).Value;
-            model.MaxSpike = new StatisticValueModel { Value = maxSpike, Date = historicalData.Find(data => data.ChangePercent == maxSpike).Date };
+            var maxChangePercent = historicalData.Max(data => data.ChangePercent).Value;
+            var maxSpike = historicalData.Find(data => data.ChangePercent == maxChangePercent);
+            model.MaxSpike = new StatisticSpikeValueModel { PercentValue = maxSpike.ChangePercent.Value, Value = maxSpike.Change.Value, Date = maxSpike.Date };
 
             //investment return
             int numberOfShares = 1000;
