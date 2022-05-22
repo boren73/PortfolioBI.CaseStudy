@@ -5,18 +5,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
-using PortfolioBI.CaseStudy.Core.Interfaces;
+using PortfolioBI.CaseStudy.Enums;
+using PortfolioBI.CaseStudy.Repositories.Interfaces;
 
-namespace PortfolioBI.CaseStudy.Core.Abstracts
+namespace PortfolioBI.CaseStudy.Repositories.Abstracts
 {
-    public abstract class HistoricalDataService<T> : IHistoricalDataService<T>
+    public abstract class HistoricalData<T> : IHistoricalData<T>
     {
         protected readonly IWebHostEnvironment _webHostEnvironment;
-        protected readonly ILogger<HistoricalDataService<T>> _logger;
+        protected readonly ILogger<HistoricalData<T>> _logger;
         protected List<T> _historicalData;
         private static object lockObject = new object();
         
-        public HistoricalDataService(IWebHostEnvironment webHostEnvironment, ILogger<HistoricalDataService<T>> logger)
+        public HistoricalData(IWebHostEnvironment webHostEnvironment, ILogger<HistoricalData<T>> logger)
         {
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
@@ -29,7 +30,7 @@ namespace PortfolioBI.CaseStudy.Core.Abstracts
         protected void LoadHistoricalData(string csvName)
         {
             string webRootPath = _webHostEnvironment.ContentRootPath;
-            string fullCsvPath = Path.Combine(webRootPath, "DataSources", csvName);
+            string fullCsvPath = Path.Combine(webRootPath, GeneralOptions.DataSourceFolder, csvName);
 
             if (!File.Exists(fullCsvPath))
             {
@@ -48,12 +49,11 @@ namespace PortfolioBI.CaseStudy.Core.Abstracts
                                             .ToList();
                 }
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError(ex, $"Could not load historical data file '{fullCsvPath}'!");
             }
         }
 
-        
     }
 }

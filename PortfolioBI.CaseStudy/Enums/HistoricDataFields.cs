@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PortfolioBI.CaseStudy.Core.Enums
+namespace PortfolioBI.CaseStudy.Enums
 {
     public enum HistoricDataFields
     {

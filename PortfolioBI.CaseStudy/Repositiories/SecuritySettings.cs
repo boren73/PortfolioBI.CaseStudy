@@ -2,31 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PortfolioBI.CaseStudy.Core.Interfaces;
 using PortfolioBI.CaseStudy.Models;
 using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
-using PortfolioBI.CaseStudy.Core.Enums;
+using PortfolioBI.CaseStudy.Enums;
+using PortfolioBI.CaseStudy.Repositories.Interfaces;
 
-namespace PortfolioBI.CaseStudy.Core.Services
+namespace PortfolioBI.CaseStudy.Repositiories
 {
-    public class SecuritySerringsService : ISecuritySettingsService
+    public class SecuritySettings : ISecuritySettings
     {
         protected readonly IWebHostEnvironment _webHostEnvironment;
-        protected readonly ILogger<SecuritySerringsService> _logger;
+        protected readonly ILogger<SecuritySettings> _logger;
         private List<SecuritySettingsModel> _securitySettings;
 
-        public SecuritySerringsService(IWebHostEnvironment webHostEnvironment, ILogger<SecuritySerringsService> logger)
+        public SecuritySettings(IWebHostEnvironment webHostEnvironment, ILogger<SecuritySettings> logger)
         {
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
         }
 
         public List<SecuritySettingsModel> GetSettingsData()
-        { 
-            if(_securitySettings == null)
+        {
+            if (_securitySettings == null)
             {
                 LoadData();
             }
@@ -34,14 +34,14 @@ namespace PortfolioBI.CaseStudy.Core.Services
         }
 
         private void LoadData()
-        { 
+        {
             string webRootPath = _webHostEnvironment.ContentRootPath;
-            var securitiesFile = Path.Combine(webRootPath, "Configuration", GeneralOptions.SecuritySettingsFileName);
+            var securitiesFile = Path.Combine(webRootPath, GeneralOptions.DataSourceFolder, GeneralOptions.SecuritySettingsFileName);
             try
             {
-                _securitySettings  = JsonConvert.DeserializeObject<List<SecuritySettingsModel>>(File.ReadAllText(securitiesFile));
+                _securitySettings = JsonConvert.DeserializeObject<List<SecuritySettingsModel>>(File.ReadAllText(securitiesFile));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, $"Could not load file '{securitiesFile}'!");
             }

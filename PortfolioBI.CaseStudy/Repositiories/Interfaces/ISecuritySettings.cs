@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using PortfolioBI.CaseStudy.Models;
 
-namespace PortfolioBI.CaseStudy.Core.Interfaces
+namespace PortfolioBI.CaseStudy.Repositories.Interfaces
 {
-    public interface ISecuritySettingsService
+    public interface ISecuritySettings
     {
         List<SecuritySettingsModel> GetSettingsData();
     }

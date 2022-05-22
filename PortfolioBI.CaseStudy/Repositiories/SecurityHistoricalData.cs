@@ -1,29 +1,30 @@
-﻿using System;
+﻿using PortfolioBI.CaseStudy.Models;
+using PortfolioBI.CaseStudy.Repositories.Abstracts;
+using PortfolioBI.CaseStudy.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
-using PortfolioBI.CaseStudy.Core.Abstracts;
-using PortfolioBI.CaseStudy.Models;
-using PortfolioBI.CaseStudy.Core.Enums;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using PortfolioBI.CaseStudy.Enums;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace PortfolioBI.CaseStudy.Core.Services
+namespace PortfolioBI.CaseStudy.Repositiories
 {
-    public class SecurityHistoricalDataService : HistoricalDataService<SecurityHistoricDataModel>
+    public class SecurityHistoricalData : HistoricalData<SecurityHistoricDataModel>
     {
-        public SecurityHistoricalDataService(IWebHostEnvironment webHostEnvironment, ILogger<HistoricalDataService<SecurityHistoricDataModel>> logger)
-        :base(webHostEnvironment, logger)
-        { 
+        public SecurityHistoricalData(IWebHostEnvironment webHostEnvironment, ILogger<HistoricalData<SecurityHistoricDataModel>> logger)
+        : base(webHostEnvironment, logger)
+        {
         }
 
         public override List<SecurityHistoricDataModel> GetHistoricalData(string csvName)
         {
 
             LoadHistoricalData(csvName);
-            SetChangeAndChangePercent(); 
+            SetChangeAndChangePercent();
             return _historicalData;
         }
 
@@ -47,7 +48,7 @@ namespace PortfolioBI.CaseStudy.Core.Services
                     Close = GetHistoricValue(dataValues, HistoricDataFields.Close),
                     Volume = int.Parse(dataValues[(int)HistoricDataFields.Volume])
                 };
-                if(dataValues.Count() > 6)
+                if (dataValues.Count() > 6)
                 {
                     model.Change = GetHistoricValue(dataValues, HistoricDataFields.Change);
                     model.ChangePercent = GetHistoricValue(dataValues, HistoricDataFields.ChangePercent);
@@ -55,13 +56,13 @@ namespace PortfolioBI.CaseStudy.Core.Services
 
                 return model;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, $"Problem with convertig csv line '{historicDataLine}' into HistoricDataModel");
                 return null;
             }
         }
-       
+
         private double GetHistoricValue(string[] dataValues, HistoricDataFields field)
         {
             return double.Parse(dataValues[(int)field]);

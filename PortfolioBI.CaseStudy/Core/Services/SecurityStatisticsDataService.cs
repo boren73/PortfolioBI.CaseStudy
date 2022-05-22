@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using PortfolioBI.CaseStudy.Core.Interfaces;
 using PortfolioBI.CaseStudy.Models;
+using PortfolioBI.CaseStudy.Repositories.Interfaces;
 
 namespace PortfolioBI.CaseStudy.Core.Services
 {
     public class SecurityStatisticsDataService : IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel>
     {
-        private readonly ISecuritySettingsService _securitySettingsService;
-        public SecurityStatisticsDataService(ISecuritySettingsService securitySettingsService)
+        private readonly ISecuritySettings _securitySettingsService;
+        public SecurityStatisticsDataService(ISecuritySettings securitySettingsService)
         {
             _securitySettingsService = securitySettingsService;
         }

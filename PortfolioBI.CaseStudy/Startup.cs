@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 using PortfolioBI.CaseStudy.Core.Interfaces;
 using PortfolioBI.CaseStudy.Core.Services;
 using PortfolioBI.CaseStudy.Models;
-using PortfolioBI.CaseStudy.Core.Abstracts;
+using PortfolioBI.CaseStudy.Repositories.Interfaces;
+using PortfolioBI.CaseStudy.Repositiories;
 
 namespace PortfolioBI.CaseStudy
 {
@@ -35,8 +36,8 @@ namespace PortfolioBI.CaseStudy
    //         services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
    //provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<HistoricalDataService<SecurityHistoricDataModel>>>());
 
-            services.AddSingleton<ISecuritySettingsService, SecuritySerringsService>();
-            services.AddScoped<IHistoricalDataService<SecurityHistoricDataModel>, SecurityHistoricalDataService>();
+            services.AddSingleton<ISecuritySettings, SecuritySettings>();
+            services.AddScoped<IHistoricalData<SecurityHistoricDataModel>, SecurityHistoricalData>();
             services.AddScoped<IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel>, SecurityStatisticsDataService>();
             services.AddScoped<IHistoricalChartDataService<object, SecurityHistoricDataModel>, SecurityChartDataService>();
 

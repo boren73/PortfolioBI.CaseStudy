@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using PortfolioBI.CaseStudy.Core.Interfaces;
 using PortfolioBI.CaseStudy.Core.Services;
 using PortfolioBI.CaseStudy.Models;
+using PortfolioBI.CaseStudy.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,21 +16,21 @@ namespace PortfolioBI.CaseStudy.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IHistoricalDataService<SecurityHistoricDataModel> _securityHistoricDataService;
+        private readonly IHistoricalData<SecurityHistoricDataModel> _securityHistoricData;
         private readonly IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> _securityStatisticsDataService;
         private readonly List<SecuritySettingsModel>  _securitiesSettings;
         private readonly IHistoricalChartDataService<object, SecurityHistoricDataModel> _chartDataService;
 
         public HomeController(ILogger<HomeController> logger,
-                              IHistoricalDataService<SecurityHistoricDataModel> securityHistoricDataService,
+                              IHistoricalData<SecurityHistoricDataModel> securityHistoricData,
                               IStatisticsDataService<SecurityStatisticDataModel, SecurityHistoricDataModel> securityStatisticsDataService,
-                              ISecuritySettingsService securitySettingsService,
+                              ISecuritySettings securitySettings,
                               IHistoricalChartDataService<object, SecurityHistoricDataModel> chartDataService)
         {
             _logger = logger;
-            _securityHistoricDataService = securityHistoricDataService;
+            _securityHistoricData = securityHistoricData;
             _securityStatisticsDataService = securityStatisticsDataService;
-            _securitiesSettings = securitySettingsService.GetSettingsData();
+            _securitiesSettings = securitySettings.GetSettingsData();
             _chartDataService = chartDataService;
         }
 
@@ -62,7 +63,7 @@ namespace PortfolioBI.CaseStudy.Controllers
             
             foreach (var security in _securitiesSettings)
             {
-                var historicalData = _securityHistoricDataService.GetHistoricalData(security.FileName);
+                var historicalData = _securityHistoricData.GetHistoricalData(security.FileName);
                 var statisticsData = _securityStatisticsDataService.GetStatisticsData(security.Id, historicalData);
                 var chartData = _chartDataService.GetChartData(historicalData);
                 listOfSecurities.Add(new SecurityModel(security.Id, security.SecurityName, historicalData, statisticsData, chartData));
@@ -79,7 +80,7 @@ namespace PortfolioBI.CaseStudy.Controllers
                 return null;
             }
 
-            var historicalData = _securityHistoricDataService.GetHistoricalData(security.FileName);
+            var historicalData = _securityHistoricData.GetHistoricalData(security.FileName);
             var statisticsData = _securityStatisticsDataService.GetStatisticsData(id, historicalData);
             var chartData = _chartDataService.GetChartData(historicalData);
             return new SecurityModel(security.Id, security.SecurityName, historicalData, statisticsData, chartData);

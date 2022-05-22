@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PortfolioBI.CaseStudy.Core.Interfaces
+namespace PortfolioBI.CaseStudy.Repositories.Interfaces
 {
-    public interface IHistoricalDataService<T>
+    public interface IHistoricalData<T>
     {
         List<T> GetHistoricalData(string csvName);
     }
