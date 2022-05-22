@@ -1,6 +1,6 @@
 ﻿@model PortfolioBI.CaseStudy.Models.SecurityModel
 @using System.Globalization
- 
+
 <h2>@string.Format("{0}({1})", Model.SecurityName, Model.Id)</h2>
 <div class="container">
     <div class="row">
@@ -21,13 +21,14 @@
         </div>
     </div>
     <div>
-        Return On Investment(ROI) for @Model.StatisticsData.ReturnOnInvestment.NumberOfShares.ToString("N0",new CultureInfo("en-US")) shares from @Model.StatisticsData.ReturnOnInvestment.InvestedDate.ToString("MM/dd/yyyy") to the date of significant price spike(@Model.StatisticsData.ReturnOnInvestment.Date.ToString("MM/dd/yyyy")) is <strong>@string.Format("{0}%", Model.StatisticsData.ReturnOnInvestment.Value.ToString("N2"))</strong>
+        Return On Investment(ROI) for @Model.StatisticsData.ReturnOnInvestment.NumberOfShares.ToString("N0", new CultureInfo("en-US")) shares from @Model.StatisticsData.ReturnOnInvestment.InvestedDate.ToString("MM/dd/yyyy") to the date of significant price spike(@Model.StatisticsData.ReturnOnInvestment.Date.ToString("MM/dd/yyyy")) is <strong>@string.Format("{0}%", Model.StatisticsData.ReturnOnInvestment.Value.ToString("N2"))</strong>
     </div>
 </div>
 @(Html.DevExtreme().Chart()
     .ID($"chart_{Model.Id}")
     .Title("Stock Price")
     .Legend(l => l.Visible(false))
+    .Crosshair(c => c.Enabled(true))
     .CommonSeriesSettings(s => s
         .ArgumentField("Date")
         .Type(SeriesType.Stock)
@@ -66,12 +67,12 @@
                 var changeColor = Number(arg.point.data.CH) > 0 ? 'green' : (Number(arg.point.data.CH) == 0 ? 'black' : 'red');
                 content.push('<table style="width:100%">');
                 content.push('<tr><td>Date:</td><td align="right">' + arg.point.data.Date.toDateString() + '</td></tr>');
-                content.push('<tr><td>Open:</td><td align="right">' + arg.openValue + '$</td></tr>');
-                content.push('<tr><td>Close:</td><td align="right">' + arg.closeValue + '$</td></tr>');
-                content.push('<tr><td>High:</td><td align="right">' + arg.highValue + '$</td></tr>');
-                content.push('<tr><td>Low:</td><td align="right">' + arg.lowValue + '$</td></tr>');
-                content.push('<tr><td>Change:</td><td align="right" style="color:' + changeColor + '">'+ changePrefix + arg.point.data.CH+ '</td></tr>');
-                content.push('<tr><td>ChangePercent:</td><td align="right" style="color:' + changeColor + '">' + arg.point.data.CHP + '%</td></tr>');
+                content.push('<tr><td>Open:</td><td align="right">' + arg.openValue.toFixed(2) + '$</td></tr>');
+                content.push('<tr><td>Close:</td><td align="right">' + arg.closeValue.toFixed(2) + '$</td></tr>');
+                content.push('<tr><td>High:</td><td align="right">' + arg.highValue.toFixed(2) + '$</td></tr>');
+                content.push('<tr><td>Low:</td><td align="right">' + arg.lowValue.toFixed(2) + '$</td></tr>');
+                content.push('<tr><td>Change:</td><td align="right" style="color:' + changeColor + '">'+ changePrefix + arg.point.data.CH.toFixed(2) + '</td></tr>');
+                content.push('<tr><td>ChangePercent:</td><td align="right" style="color:' + changeColor + '">' + arg.point.data.CHP.toFixed(2) + '%</td></tr>');
                 return {
                     html: content.join('')
                 };

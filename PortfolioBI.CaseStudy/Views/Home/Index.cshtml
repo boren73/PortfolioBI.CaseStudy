@@ -2,10 +2,28 @@
 @{
     ViewData["Title"] = "Case Study Scenario 1";
 }
+@(Html.DevExtreme().TabPanel()
+    .ID("tabPanel")
+    .SelectedIndex(0)
+    .Loop(false)
+    .AnimationEnabled(true)
+    .SwipeEnabled(true)
+    .Items(i =>
+    {
+        foreach(var security in Model)
+        {
+            i.Add()
+            .Title(security.Id)
+            .Template(@<text>
+                <div style="tabpanel-item">
+                    @Html.Partial("_SecurityDetails", security))
+                </div>
+            </text>);
+        }
+
+    })
+)
 
 <div>
-    @foreach (var security in Model)
-    {
-        @Html.Partial("_SecurityDetails", security)
-    }
+   
 </div>
