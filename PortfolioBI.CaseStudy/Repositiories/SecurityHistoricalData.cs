@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using PortfolioBI.CaseStudy.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
