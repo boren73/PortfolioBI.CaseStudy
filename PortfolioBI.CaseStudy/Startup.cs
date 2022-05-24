@@ -31,10 +31,6 @@ namespace PortfolioBI.CaseStudy
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
-   //         services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
-   //provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<DataSourceService>>());
-   //         services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(provider =>
-   //provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<HistoricalDataService<SecurityHistoricDataModel>>>());
 
             services.AddSingleton<ISecuritySettings, SecuritySettings>();
             services.AddScoped<IHistoricalData<SecurityHistoricDataModel>, SecurityHistoricalData>();

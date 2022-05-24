@@ -16,7 +16,7 @@
             .Title(security.Id)
             .Template(@<text>
                 <div style="tabpanel-item">
-                    @Html.Partial("_SecurityDetails", security))
+                    @await Html.PartialAsync("_SecurityDetails", security)
                 </div>
             </text>);
         }
