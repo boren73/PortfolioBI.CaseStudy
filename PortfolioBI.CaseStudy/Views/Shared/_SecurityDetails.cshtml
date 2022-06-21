@@ -14,11 +14,14 @@
             <span class="price high">@string.Format("{0}$", Model.StatisticsData.MaxClose.Value.ToString("N2"))</span>
             <span class="date">@Model.StatisticsData.MaxClose.Date.ToString("MM/dd/yyyy")</span>
         </div>
+        @if (Model.StatisticsData.MaxSpike != null)
+        {
         <div class="col">
             <span class="label">Most positive change:</span>
-            <span class="price spike">@string.Format("+{0}({1}%)", Model.StatisticsData.MaxSpike.Value.ToString("N2"), Model.StatisticsData.MaxSpike.PercentValue.ToString("N2"))</span>
+            <span class="price spike">@string.Format("{0}", Model.StatisticsData.MaxSpike.Value.ToString("N2"))</span>
             <span class="date">@Model.StatisticsData.MaxSpike.Date.ToString("MM/dd/yyyy")</span>
         </div>
+        }
     </div>
     <div>
         Return On Investment(ROI) for @Model.StatisticsData.ReturnOnInvestment.NumberOfShares.ToString("N0", new CultureInfo("en-US")) shares from @Model.StatisticsData.ReturnOnInvestment.InvestedDate.ToString("MM/dd/yyyy") to the date of significant price spike(@Model.StatisticsData.ReturnOnInvestment.Date.ToString("MM/dd/yyyy")) is <strong>@string.Format("{0}%", Model.StatisticsData.ReturnOnInvestment.Value.ToString("N2"))</strong>
@@ -113,14 +116,16 @@
         .Type(AnnotationType.Text)
         .Description($"The lowest price was  {Model.StatisticsData.MinClose.Value.ToString("N2")}$ on a day {Model.StatisticsData.MinClose.Date.ToString("MM/dd/yyyy")}")
         .Text("Min");
-
-        a.Add()
-        .Opacity(0.6)
-        .Font(f => { f.Color("blue"); })
-        .Argument(Model.StatisticsData.MaxSpike.Date)
-        .Type(AnnotationType.Text)
-        .Description($"The most positive change was +{@Model.StatisticsData.MaxSpike.Value.ToString("N2")}({Model.StatisticsData.MaxSpike.PercentValue.ToString("N2")}%) on a day {Model.StatisticsData.MaxSpike.Date.ToString("MM/dd/yyyy")}")
-        .Text("Spike");
+        if (Model.StatisticsData.MaxSpike != null)
+        {
+            a.Add()
+            .Opacity(0.6)
+            .Font(f => { f.Color("blue"); })
+            .Argument(Model.StatisticsData.MaxSpike.Date)
+            .Type(AnnotationType.Text)
+            .Description($"The most positive change was {@Model.StatisticsData.MaxSpike.Value.ToString("N2")} on a day {Model.StatisticsData.MaxSpike.Date.ToString("MM/dd/yyyy")}")
+            .Text("Spike");
+        }
     })
     .DataSource(Model.HistoricalChartData)
 )

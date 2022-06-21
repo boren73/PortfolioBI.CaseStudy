@@ -19,6 +19,8 @@ namespace PortfolioBI.CaseStudy.Models
 
         public int Volume { get; set; }
 
+        public double Spike { get; set; }
+
         public double? Change { get; set; }
 
         public double? ChangePercent { get; set; }

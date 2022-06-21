@@ -23,7 +23,7 @@ namespace PortfolioBI.CaseStudy.Repositiories
         {
 
             LoadHistoricalData(csvName);
-            SetChangeAndChangePercent();
+            SetSpikeChangeAndChangePercent();
             return _historicalData;
         }
 
@@ -79,7 +79,7 @@ namespace PortfolioBI.CaseStudy.Repositiories
             return historicDataLine.Replace(volumePattern, formatedVolume);
         }
 
-        private void SetChangeAndChangePercent()
+        private void SetSpikeChangeAndChangePercent()
         {
             for (int i = 0; i < _historicalData.Count; i++)
             {
@@ -96,8 +96,11 @@ namespace PortfolioBI.CaseStudy.Repositiories
                         double previousClose = _historicalData[i - 1].Close;
                         currentData.Change = Math.Round(currentData.Close - previousClose, 2);
                         currentData.ChangePercent = Math.Round((currentData.Change.Value / previousClose) * 100, 2);
+                        
                     }
                 }
+
+                currentData.Spike = currentData.High - currentData.Low;
             }
         }
     }

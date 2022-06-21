@@ -27,19 +27,21 @@ namespace PortfolioBI.CaseStudy.Core.Services
             var minClose = historicalData.Min(data => data.Close);
             model.MinClose = new StatisticValueModel { Value = minClose, Date = historicalData.Find(data => data.Close == minClose).Date };
 
-            var maxChangePercent = historicalData.Max(data => data.ChangePercent).Value;
-            var maxSpike = historicalData.Find(data => data.ChangePercent == maxChangePercent);
-            model.MaxSpike = new StatisticSpikeValueModel { PercentValue = maxSpike.ChangePercent.Value, Value = maxSpike.Change.Value, Date = maxSpike.Date };
+          //  var maxChangePercent = historicalData.Max(data => data.ChangePercent).Value;
+            var maxSpike = historicalData.FindAll(data => data.ChangePercent > 0)?.Max(data => data.Spike);
+            model.MaxSpike = maxSpike.HasValue 
+                ?  new StatisticValueModel { Value = maxSpike.Value, Date = historicalData.Find(data => data.Spike == maxSpike.Value).Date }
+                : null;
 
             //Return on Investment(ROI)
             var securitySettings = _securitySettingsService.GetSettingsData().Find(s => s.Id == id);
-            if (securitySettings != null)
+            if (securitySettings != null && maxSpike.HasValue)
             { 
                 int numberOfShares = securitySettings.ROI.NumberOfShares;
                 double currentInvestment = historicalData.Find(data => data.Date == model.MaxSpike.Date).Close * numberOfShares;
                 double invested = historicalData.FindLast(data => data.Date >= securitySettings.ROI.Invested).Close * numberOfShares;
                 double roi = ((currentInvestment - invested) / invested) * 100;
-                model.ReturnOnInvestment = new StatisticROIValueModel { Value = Math.Round(roi, 2), Date = maxSpike.Date, InvestedDate = securitySettings.ROI.Invested, NumberOfShares = numberOfShares };
+                model.ReturnOnInvestment = new StatisticROIValueModel { Value = Math.Round(roi, 2), Date = model.MaxSpike.Date, InvestedDate = securitySettings.ROI.Invested, NumberOfShares = numberOfShares };
             }
             return model;
         }
